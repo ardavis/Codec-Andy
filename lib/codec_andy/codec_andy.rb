@@ -1,96 +1,71 @@
 require 'rubygems'
 require 'RMagick'
 require 'ruby-debug'
+require 'shannon_fano'
 
-include Magick
+class CodecAndy
+  include Magick
 
-path = "#{File.dirname(__FILE__)}/../../Images/lena512color.tiff"
-image = ImageList.new(path)
 
-# Get the pixel values of the input image
-pixels = image.get_pixels(0, 0, image.columns, image.rows)
+  path = "#{File.dirname(__FILE__)}/../../Images/lena512color.tiff"
+  image = ImageList.new(path)
 
-pixel_hash = {}
-code_hash = {}
+  # Get the pixel values of the input image
+  pixels = image.get_pixels(0, 0, image.columns, image.rows)
 
-# Store pixels into the array
+  pixel_hash = {}
+  code_hash = {}
 
-(0..image.rows-1).each do |row|
-  (0..image.columns-1).each do |col|
-    # Grab the current pixel
-    current_pixel = (row * image.rows) + col
+  # Store pixels into the array
 
-    # Get the RGB values of the current_pixel
-    red   = pixels[current_pixel].red
-    green = pixels[current_pixel].green
-    blue  = pixels[current_pixel].blue
+  (0..image.rows-1).each do |row|
+    (0..image.columns-1).each do |col|
+      # Grab the current pixel
+      current_pixel = (row * image.rows) + col
 
-    # Add the current pixel value to the hash if it doesn't exist, otherwise, increment it
-    if pixel_hash.key?("" + red.to_s + "," + green.to_s + "," + blue.to_s + "")
-      pixel_hash[(red.to_s + "," + green.to_s + "," + blue.to_s)] += 1
-    else
-      pixel_hash[(red.to_s + "," + green.to_s + "," + blue.to_s)] = 1
+      # Get the RGB values of the current_pixel
+      red   = pixels[current_pixel].red
+      green = pixels[current_pixel].green
+      blue  = pixels[current_pixel].blue
+
+      # Add the current pixel value to the hash if it doesn't exist, otherwise, increment it
+      if pixel_hash.key?("" + red.to_s + "," + green.to_s + "," + blue.to_s + "")
+        pixel_hash[(red.to_s + "," + green.to_s + "," + blue.to_s)] += 1
+      else
+        pixel_hash[(red.to_s + "," + green.to_s + "," + blue.to_s)] = 1
+      end
     end
   end
-end
 
-# Sort the hash of pixels to get the largest value at the front
-pixel_hash.sort_by { |k,v| v }
-pixel_hash.sort { |x,y| y.reverse <=> x.reverse }
+  # Sort the hash of pixels to get the largest value at the front
+  pixel_hash.sort_by { |k,v| v }
+  pixel_hash.sort { |x,y| y.reverse <=> x.reverse }
 
-# Split the pixel_hash into two parts
-pixel_array = pixel_hash.to_a
+  # Split the pixel_hash into two parts
+  pixel_array = pixel_hash.to_a
 
-shannon_fano(pixel_array, code_hash)
+  shannon_fano(pixel_array, code_hash)
 
-#pivot   = pixel_hash.size / 2
-#column_1 = pixel_array[0, pivot]
-#column_2 = pixel_array[pivot..pixel_array.size - 1]
-#column_1.each do |array|
-#  code_hash[array[0].to_s] = "0"
-#end
-#
-#
-#column_2.each do |array|
-#  code_hash[array[0].to_s] = "1"
-#end
+  #pivot   = pixel_hash.size / 2
+  #column_1 = pixel_array[0, pivot]
+  #column_2 = pixel_array[pivot..pixel_array.size - 1]
+  #column_1.each do |array|
+  #  code_hash[array[0].to_s] = "0"
+  #end
+  #
+  #
+  #column_2.each do |array|
+  #  code_hash[array[0].to_s] = "1"
+  #end
 
-debugger
+  debugger
 
+  puts code_hash
 
-def shannon_fano(array, code)
-  pivot = array.size / 2
+  # TODO Remove
+  debugger
 
-  col_1 = array[0, pivot]
-  col_2 = array[pivot..array.size - 1]
-
-  # Perform recursively until this column cannot be divided
-  unless (col_1.size <= 2)
-
-    # Set the code for the upper half of this column
-    col_1.each do |val|
-      code[val[0].to_s = "0"]
-    end
-
-    shannon_fano(col_1, code)
-  end
-
-  # Perform recursively until this column cannot be divided
-  unless (col_2.size <= 2)
-
-    # Set the code for the lower half of this column
-    col_2.each do |val|
-      code[val[0].to_s = "1"]
-    end
-
-    shannon_fano(col_2, code)
+  (0..1).each do |bla|
+    puts bla
   end
 end
-
-# TODO Remove
-debugger
-
-(0..1).each do |bla|
-  puts bla
-end
-
