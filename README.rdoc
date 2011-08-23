@@ -1,0 +1,19 @@
+=CodecAndy
+
+This codec is written by Andrew Davis at Kettering University, particularlly his Multimedia Design course.
+
+This codec is meant to compress and decompress image files using the Shannon-Fano algorithm.
+
+If you have any questions, please contact Andrew Davis at andrew@andrewrdavis.net
+
+
+The Header of the encoded file should look like:
+
+Shannon-Fano or Huffman (One word only)
+BEGIN
+  001 - 62,41,93        (RGB)
+  011 - 49,101,255
+  etc
+END
+
+0110101010101101...

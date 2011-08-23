@@ -1,5 +1,5 @@
-module ShannonFanoAlgorithm
-  class ShannonFano
+module ShannonFano
+
     def shannon_fano(array, code)
       pivot = array.size / 2
 
@@ -26,7 +26,9 @@ module ShannonFanoAlgorithm
         end
 
         shannon_fano(col_2, code)
+
+        code
       end
     end
-  end
+
 end

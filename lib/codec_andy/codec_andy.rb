@@ -1,3 +1,5 @@
+$LOAD_PATH.unshift(File.dirname(__FILE__))
+
 require 'rubygems'
 require 'RMagick'
 require 'ruby-debug'
@@ -5,7 +7,7 @@ require 'shannon_fano'
 
 class CodecAndy
   include Magick
-  include ShannonFanoAlgorithm
+  include ShannonFano
 
 
   path = "#{File.dirname(__FILE__)}/../../Images/lena512color.tiff"
