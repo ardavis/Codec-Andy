@@ -4,84 +4,93 @@ require 'ruby-debug'
 
 include Magick
 
-# Final Variables
-RED   = 0
-GREEN = 1
-BLUE  = 2
-
 path = "#{File.dirname(__FILE__)}/../../Images/lena512color.tiff"
 image = ImageList.new(path)
 
 # Get the pixel values of the input image
 pixels = image.get_pixels(0, 0, image.columns, image.rows)
 
-
-# Initialize an array of columns*rows
-image_array = Array.new(image.columns) { Array.new(image.rows) { Array.new(3) {0} } }
-
-# Initialize empty array of every possible pixel value... (0, 0, 0) => (256, 256, 256)
-pixel_array = Array.new(256) { Array.new(256) { Array.new(256) {0} } }
-
-# Print Dimensions
-#puts "Width: " + image.rows.to_s
-#puts "Height: " + image.columns.to_s
-#puts "# of Pixels: " + pixels.count.to_s
+pixel_hash = {}
+code_hash = {}
 
 # Store pixels into the array
 
 (0..image.rows-1).each do |row|
   (0..image.columns-1).each do |col|
-    debugger
+    # Grab the current pixel
     current_pixel = (row * image.rows) + col
 
-    red_value   = pixels[current_pixel].red
-    green_value = pixels[current_pixel].green
-    blue_value  = pixels[current_pixel].blue
+    # Get the RGB values of the current_pixel
+    red   = pixels[current_pixel].red
+    green = pixels[current_pixel].green
+    blue  = pixels[current_pixel].blue
 
-    image_array[row][col][RED]    = red_value
-    image_array[row][col][GREEN]  = green_value
-    image_array[row][col][BLUE]   = blue_value
-
-    pixel_array[red_value][green_value][blue_value] = pixel_array[red_value][green_value][blue_value] + 1
+    # Add the current pixel value to the hash if it doesn't exist, otherwise, increment it
+    if pixel_hash.key?("" + red.to_s + "," + green.to_s + "," + blue.to_s + "")
+      pixel_hash[(red.to_s + "," + green.to_s + "," + blue.to_s)] += 1
+    else
+      pixel_hash[(red.to_s + "," + green.to_s + "," + blue.to_s)] = 1
+    end
   end
 end
+
+# Sort the hash of pixels to get the largest value at the front
+pixel_hash.sort_by { |k,v| v }
+pixel_hash.sort { |x,y| y.reverse <=> x.reverse }
+
+# Split the pixel_hash into two parts
+pixel_array = pixel_hash.to_a
+
+shannon_fano(pixel_array, code_hash)
+
+#pivot   = pixel_hash.size / 2
+#column_1 = pixel_array[0, pivot]
+#column_2 = pixel_array[pivot..pixel_array.size - 1]
+#column_1.each do |array|
+#  code_hash[array[0].to_s] = "0"
+#end
+#
+#
+#column_2.each do |array|
+#  code_hash[array[0].to_s] = "1"
+#end
+
 debugger
 
 
+def shannon_fano(array, code)
+  pivot = array.size / 2
 
-#Array.new(512) { Array.new(512) { Array.new(3) }
-#
-## Loop through Red, Green, then Blue (color: 0 = red, 1 = green, 2 = blue)
-#(0..2).each do |color|
-#
-#  # Loop through the columns of the image
-#  (0..image.columns).each do |cols|
-#
-#    # Loop through the rows of the image
-#    (0..image.rows).each do |rows|
-#
-#    end
-#
-#  end
-#
-#end
+  col_1 = array[0, pivot]
+  col_2 = array[pivot..array.size - 1]
 
-#(0..image.rows).each do |current_row|
-  #pixels = image.export_pixels(0, 0, image.columns, 1, "RGB")
-#end
+  # Perform recursively until this column cannot be divided
+  unless (col_1.size <= 2)
 
+    # Set the code for the upper half of this column
+    col_1.each do |val|
+      code[val[0].to_s = "0"]
+    end
 
-#image = MiniMagick::Image.new(path)
+    shannon_fano(col_1, code)
+  end
 
-#
-#red_array = Array.new(256) { 0 }
-#green_array = Array.new(256) { 0 }
-#blue_array = Array.new(256) { 0 }
+  # Perform recursively until this column cannot be divided
+  unless (col_2.size <= 2)
 
+    # Set the code for the lower half of this column
+    col_2.each do |val|
+      code[val[0].to_s = "1"]
+    end
 
-#print width and height
-#image[:width].times do |x|
-#  image[:height].times do |y|
-#    p image[x, y]
-#  end
-#end
+    shannon_fano(col_2, code)
+  end
+end
+
+# TODO Remove
+debugger
+
+(0..1).each do |bla|
+  puts bla
+end
+

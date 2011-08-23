@@ -17,5 +17,11 @@ END
 0110101010101101...
 
 
+From Adam:
 
+In a hash, you could have "rv,gv,bv" as the key, then the count as the value
+
+
+column_1, column_2 = pixel_hash.enum_slice((pixel_hash.size / 2.0).round).to_a
+except pixels instead of artists
 
