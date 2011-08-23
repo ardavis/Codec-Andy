@@ -5,6 +5,7 @@ require 'shannon_fano'
 
 class CodecAndy
   include Magick
+  include ShannonFanoAlgorithm
 
 
   path = "#{File.dirname(__FILE__)}/../../Images/lena512color.tiff"
