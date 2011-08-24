@@ -43,12 +43,8 @@ class CodecAndy
   pixel_hash = pixel_hash.sort_by {|k,v| v}
   pixel_hash = pixel_hash.sort { |x,y| y.reverse <=> x.reverse }
 
-  debugger
-
   # Split the pixel_hash into two parts
   pixel_array = pixel_hash.to_a
-
-  debugger
 
   code_hash = shannon_fano(pixel_array, code_hash)
 
@@ -63,8 +59,6 @@ class CodecAndy
   #column_2.each do |array|
   #  code_hash[array[0].to_s] = "1"
   #end
-
-  debugger
 
   puts code_hash
 
