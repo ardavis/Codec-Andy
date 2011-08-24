@@ -9,7 +9,7 @@ class CodecAndy
   extend ShannonFano
 
 
-  path = "#{File.dirname(__FILE__)}/../../Images/lena512color.tiff"
+  path = "#{File.dirname(__FILE__)}/../../Images/8-bit-link.png"
   image = ImageList.new(path)
 
   # Get the pixel values of the input image
@@ -40,8 +40,7 @@ class CodecAndy
   end
 
   # Sort the hash of pixels to get the largest value at the front
-  pixel_hash = pixel_hash.sort_by {|k,v| v}
-  pixel_hash = pixel_hash.sort { |x,y| y.reverse <=> x.reverse }
+  pixel_hash = pixel_hash.sort_by {|k,v| -v}
 
   # Split the pixel_hash into two parts
   pixel_array = pixel_hash.to_a
