@@ -59,9 +59,11 @@ class Encoder
   # Put the code into the file
   open('encoded.txt', 'w') do |f|
     f.puts "Shannon-Fano\n"
+    f.puts "BEGIN"
     (0..pixel_array.size - 1).each do |index|
-      f.puts pixel_array[index][0].to_s + " - " + code_hash[pixel_array[index][0]].to_s
+      f.puts code_hash[pixel_array[index][0]].to_s + " - " + pixel_array[index][0].to_s
     end
+    f.puts "END"
     f.puts "\n"
     (0..pixel_array.size - 1).each do |index|
       f.print code_hash[pixel_array[index][0]].to_s
