@@ -1,10 +1,20 @@
 module ShannonFano
 
     def shannon_fano(array, code)
-      pivot = array.size / 2
+      num_pix = array.inject{|a| a[1]}
+      pivot = num_pix / 2
+      sum = 0
+      col_1 = []
+      col_2 = []
 
-      col_1 = array[0, pivot]
-      col_2 = array[pivot..array.size - 1]
+      array.each do |pixel|
+        if(sum < pivot)
+          col_1 << pixel
+        else
+          col_2 << pixel
+        end
+          sum += pixel[1]
+      end
 
       # Perform recursively until this column cannot be divided
       unless (col_1.size <= 2)
