@@ -1,13 +1,12 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
-require 'rubygems'
 require 'RMagick'
 require 'ruby-debug'
 require 'shannon_fano'
 
 class CodecAndy
   include Magick
-  include ShannonFano
+  extend ShannonFano
 
 
   path = "#{File.dirname(__FILE__)}/../../Images/lena512color.tiff"
@@ -41,13 +40,17 @@ class CodecAndy
   end
 
   # Sort the hash of pixels to get the largest value at the front
-  pixel_hash.sort_by { |k,v| v }
-  pixel_hash.sort { |x,y| y.reverse <=> x.reverse }
+  pixel_hash = pixel_hash.sort_by {|k,v| v}
+  pixel_hash = pixel_hash.sort { |x,y| y.reverse <=> x.reverse }
+
+  debugger
 
   # Split the pixel_hash into two parts
   pixel_array = pixel_hash.to_a
 
-  shannon_fano(pixel_array, code_hash)
+  debugger
+
+  code_hash = shannon_fano(pixel_array, code_hash)
 
   #pivot   = pixel_hash.size / 2
   #column_1 = pixel_array[0, pivot]
