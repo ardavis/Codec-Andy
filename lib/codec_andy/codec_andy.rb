@@ -23,7 +23,7 @@ class CodecAndy
   (0..image.rows-1).each do |row|
     (0..image.columns-1).each do |col|
       # Grab the current pixel
-      current_pixel = (row * image.rows) + col
+      current_pixel = (row * image.columns) + col
 
       # Get the RGB values of the current_pixel
       red   = pixels[current_pixel].red

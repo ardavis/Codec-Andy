@@ -17,7 +17,8 @@ module ShannonFano
             temp = "0"
           else
             temp = temp + "0"
-            code[val[0].to_s] = temp
+            code[val[0].to_s] = code[val[0].to_s] + temp
+            #code[val[0].to_s] = temp
           end
         end
 
@@ -34,7 +35,8 @@ module ShannonFano
             temp = "1"
           else
             temp = temp + "1"
-            code[val[0].to_s] = temp
+            code[val[0].to_s] = code[val[0].to_s] + temp
+            #code[val[0].to_s] = temp
           end
         end
 
