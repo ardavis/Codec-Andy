@@ -9,7 +9,7 @@ class CodecAndy
   extend ShannonFano
 
 
-  path = "#{File.dirname(__FILE__)}/../../Images/8-bit-link.png"
+  path = "#{File.dirname(__FILE__)}/../../Images/lock.png"
   image = ImageList.new(path)
 
   # Get the pixel values of the input image
