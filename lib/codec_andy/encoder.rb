@@ -58,8 +58,6 @@ class Encoder
       # Get the codes for each pixel using the shannon_fano method
       code_hash = shannon_fano(pixel_array, code_hash)
 
-      debugger
-
       # Put the code into the file
       open('encoded.txt', 'w') do |f|
         f.puts "Shannon-Fano\n"
@@ -87,9 +85,28 @@ class Encoder
         end
         f.puts "END"
         f.puts "\n"
-        (0..pixel_array.size - 1).each do |index|
-          f.print code_hash[pixel_array[index][0]].to_s
+        #(0..pixel_array.size - 1).each do |index|
+        #  debugger
+        #  f.print code_hash[pixel_array[index][0]].to_s
+        #end
+
+        (0..image.rows-1).each do |row|
+          (0..image.columns-1).each do |col|
+            # Grab the current pixel
+            current_pixel = (row * image.columns) + col
+
+            # Get the RGB values of the current_pixel
+            red   = pixels[current_pixel].red
+            green = pixels[current_pixel].green
+            blue  = pixels[current_pixel].blue
+
+            color = [red, green, blue].join(',')
+
+            puts color.to_s + ": " + code_hash[color].to_s
+            f.print code_hash[color].to_s
+          end
         end
+
       end
     end
   end

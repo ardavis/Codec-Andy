@@ -88,12 +88,30 @@ class Decoder
 
   end
 
-  debugger
 
-  image = ImageList.new("Images/export.png")
+  size = Math.sqrt(decoded_array.size).to_i
+  image = Magick::ImageList.new
+  image.new_image(size, size)
 
-  size = Math.sqrt(decoded_array.size)
-  image.store_pixels(0, 0, size, size, decoded_array)
+    q = Array.new                           # Create an array of pixels one
+    size.times do                     # row long
+      q << Magick::Pixel.new(0,0,0,0)
+    end
+
+  n = 0
+    size.times do |y|                # Store pixels a row at a time
+
+        size.times do |x|             # Build a row of pixels
+            decoded_array[x].red   = decoded_colors[n]
+            decoded_array[x].green = decoded_colors[n]
+            decoded_array[x].blue  = decoded_colors[n]
+        n += 1
+        end
+                                            # Store the row of pixels
+        image.store_pixels(0, y, size, 1, decoded_array)
+    end
+
+  #image.store_pixels(0, 0, 4, 4, decoded_array)
 
   image.write("jpeg:"+ "Images/export.jpg")
 
