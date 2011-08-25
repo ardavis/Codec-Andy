@@ -66,6 +66,37 @@ class Decoder
     end
   end
 
+  #[red=255, green=255, blue=255, opacity=255]
+
+  decoded_colors = decoded.split(',').map(&:to_i)
+  decoded_array = []
+
+  n = 3
+
+  red_array = (n - 3).step(decoded_colors.size - 3, n).map { |i| decoded_colors[i] }
+  green_array = (n - 2).step(decoded_colors.size - 2, n).map { |i| decoded_colors[i] }
+  blue_array = (n - 1).step(decoded_colors.size - 1, n).map { |i| decoded_colors[i] }
+
+  #opacity = 25
+  (0..((decoded_colors.size / 3) - 1)).each do |triple|
+    red = red_array[triple]
+    green = green_array[triple]
+    blue = blue_array[triple]
+
+    decoded_array << Magick::Pixel.new(red, green, blue, 0)
+    decoded_array.reverse!
+
+  end
+
+  debugger
+
+  image = ImageList.new("Images/export.png")
+
+  size = Math.sqrt(decoded_array.size)
+  image.store_pixels(0, 0, size, size, decoded_array)
+
+  image.write("jpeg:"+ "Images/export.jpg")
+
   debugger
 
   file.close

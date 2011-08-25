@@ -30,7 +30,6 @@ class Encoder
       code_hash = {}
 
       # Store pixels into the array
-
       (0..image.rows-1).each do |row|
         (0..image.columns-1).each do |col|
           # Grab the current pixel
@@ -58,6 +57,8 @@ class Encoder
 
       # Get the codes for each pixel using the shannon_fano method
       code_hash = shannon_fano(pixel_array, code_hash)
+
+      debugger
 
       # Put the code into the file
       open('encoded.txt', 'w') do |f|
