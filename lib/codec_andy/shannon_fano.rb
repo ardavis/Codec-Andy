@@ -1,5 +1,18 @@
-module ShannonFano
+#######################################################
+#           shannon_fano.rb
+#
+# Author: Andrew R. Davis
+# School: Kettering University
+#
+# This is the core of the project. This file is a
+# recursive algorithm that will split an input array
+# into two parts over and over, and appending values
+# of '0' or '1' appropriately. This will produce the
+# shannon-fano method of compression
+#
+#######################################################
 
+module ShannonFano
     def shannon_fano(array, code)
       num_pix = array.collect{|a| a[1]}.inject{|total, n| total + n}
       pivot = num_pix / 2
@@ -59,5 +72,4 @@ module ShannonFano
       # Return the hash of codes
       code
     end
-
 end

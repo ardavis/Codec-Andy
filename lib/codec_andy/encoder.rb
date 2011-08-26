@@ -1,3 +1,15 @@
+#######################################################
+#           encoder.rb
+#
+# Author: Andrew R. Davis
+# School: Kettering University
+#
+# This encoder is meant to take an input file and
+# decode the image pixel by pixel. It will then spit
+# out a .txt file containing codes for each pixel used
+#
+#######################################################
+
 $LOAD_PATH.unshift(File.dirname(__FILE__))
 
 require 'RMagick'               # This is for image processing, to use 'get_pixels'
@@ -21,18 +33,8 @@ class Encoder
       image_path = argument
       image = ImageList.new(image_path)
 
-      debugger
-
       # Get the pixel values of the input image
       pixels = image.get_pixels(0, 0, image.columns, image.rows)
-
-      open('not_encoded.txt', 'w') do |f|
-        counter = 0
-        pixels.each do |pixel|
-          f.puts "#{counter}: " + "#{pixel}"
-          counter += 1
-        end
-      end
 
       # Initialize empty hashes for the pixel data and the code data
       pixel_hash = {}
@@ -94,10 +96,6 @@ class Encoder
         end
         f.puts "END"
         f.puts "\n"
-        #(0..pixel_array.size - 1).each do |index|
-        #  debugger
-        #  f.print code_hash[pixel_array[index][0]].to_s
-        #end
 
         (0..image.rows-1).each do |row|
           (0..image.columns-1).each do |col|
