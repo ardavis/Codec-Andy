@@ -78,66 +78,51 @@ class Decoder
   blue_array = (n - 1).step(decoded_colors.size - 1, n).map { |i| decoded_colors[i] }
 
   #opacity = 25
-  (0..((decoded_colors.size / 3) - 1)).each do |triple|
-    red = red_array[triple]
-    green = green_array[triple]
-    blue = blue_array[triple]
+  #(0..((decoded_colors.size / 3) - 1)).each do |triple|
+  #  red = red_array[triple]
+  #  green = green_array[triple]
+  #  blue = blue_array[triple]
+  #
+  #  decoded_array << Magick::Pixel.new(red, green, blue, 0)
+  #  #decoded_array.reverse!
+  #
+  #end
 
-    decoded_array << Magick::Pixel.new(red, green, blue, 0)
-    decoded_array.reverse!
 
+  image_width = Math.sqrt(decoded_colors.count / 3).to_i
+  image_height = image_width
+  image = Magick::ImageList.new
+  image.new_image(image_width, image_height)
+
+  image.class_type = PseudoClass
+
+  g = Magick::Geometry.new(image_width, image_height, 0, 0, '!')
+  image.change_geometry(g) {|cols,rows, img|
+    img.resize!(cols, rows)
+  }
+
+
+  a = Array.new                         # Create an array of pixels one
+  image_width.times do                  # row long
+    a << Magick::Pixel.new(0,0,0,0)
   end
 
 
-  size = Math.sqrt(decoded_array.size).to_i
-  image = Magick::ImageList.new
-  image.new_image(size, size)
-
-    q = Array.new                           # Create an array of pixels one
-    size.times do                     # row long
-      q << Magick::Pixel.new(0,0,0,0)
-    end
-
   n = 0
-    size.times do |y|                # Store pixels a row at a time
-
-        size.times do |x|             # Build a row of pixels
-            decoded_array[x].red   = decoded_colors[n]
-            decoded_array[x].green = decoded_colors[n]
-            decoded_array[x].blue  = decoded_colors[n]
-        n += 1
-        end
-                                            # Store the row of pixels
-        image.store_pixels(0, y, size, 1, decoded_array)
-    end
-
-  #image.store_pixels(0, 0, 4, 4, decoded_array)
-
-  image.write("jpeg:"+ "Images/export.jpg")
+  image_height.times do |y|                # Store pixels a row at a time
+      image_width.times do |x|             # Build a row of pixels
+          a[x].red   = QuantumRange * decoded_colors[n]
+          a[x].green = QuantumRange * decoded_colors[n]
+          a[x].blue  = QuantumRange * decoded_colors[n]
+          n = n + 1
+      end
+                                          # Store the row of pixels
+      image.store_pixels(0, y, image_width, 1, a)
+  end
 
   debugger
+  image.write("Images/export.gif")
+
 
   file.close
 end
-
-
-# Maybe store entire coded section into a single string
-# Check first character, see if it's a code
-# If not, add another character to check, check if it's a code
-#
-# string decoded = ""
-# string build = ""
-# for (index = 0; index < input.length(); index++)
-#  {
-#    build = concat(build, input[index]);
-#
-#    if (checkList(build))
-#        build = string.empty;
-#    end
-#
-#  }
-#
-#
-#  def checkList(build)
-#     if build is found, add it to decoded, then return true or false if it wasn't
-#  end

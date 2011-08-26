@@ -21,9 +21,18 @@ class Encoder
       image_path = argument
       image = ImageList.new(image_path)
 
+      debugger
 
       # Get the pixel values of the input image
       pixels = image.get_pixels(0, 0, image.columns, image.rows)
+
+      open('not_encoded.txt', 'w') do |f|
+        counter = 0
+        pixels.each do |pixel|
+          f.puts "#{counter}: " + "#{pixel}"
+          counter += 1
+        end
+      end
 
       # Initialize empty hashes for the pixel data and the code data
       pixel_hash = {}
